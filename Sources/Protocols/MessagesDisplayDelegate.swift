@@ -57,6 +57,8 @@ public protocol MessagesDisplayDelegate: AnyObject {
     ///   All other senders: Gray
     func backgroundColor(for message: MessageType, at  indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
 
+    func vertifcalLineBackgroundColor(for message: MessageType, at  indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> UIColor
+
     /// The section header to use for a given `IndexPath`.
     ///
     /// - Parameters:

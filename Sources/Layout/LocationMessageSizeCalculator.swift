@@ -27,15 +27,19 @@ import Foundation
 open class LocationMessageSizeCalculator: MessageSizeCalculator {
 
     open override func messageContainerSize(for message: MessageType) -> CGSize {
+        var size = CGSize.zero
         switch message.kind {
         case .location(let item):
             let maxWidth = messageContainerMaxWidth(for: message)
             if maxWidth < item.size.width {
                 // Maintain the ratio if width is too great
                 let height = maxWidth * item.size.height / item.size.width
-                return CGSize(width: maxWidth, height: height)
+                size =  CGSize(width: maxWidth, height: height)
+            } else {
+                size = item.size
             }
-            return item.size
+            size.width = UIScreen.main.bounds.width - 40
+            return size
         default:
             fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
         }

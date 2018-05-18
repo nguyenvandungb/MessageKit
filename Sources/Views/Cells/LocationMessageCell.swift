@@ -42,6 +42,7 @@ open class LocationMessageCell: MessageContentCell {
         messageContainerView.addSubview(imageView)
         messageContainerView.addSubview(activityIndicator)
         setupConstraints()
+        messageContainerView.bringSubview(toFront: verticalLine)
     }
 
     /// Responsible for setting up the constraints of the cell's subviews.
