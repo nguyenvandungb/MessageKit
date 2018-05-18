@@ -60,6 +60,11 @@ open class MessageContentCell: MessageCollectionViewCell {
         return label
     }()
 
+    open var verticalLine: UIView = {
+        let line = UIView(frame: CGRect.zero)
+        return line
+    }()
+
     /// The `MessageCellDelegate` for the cell.
     open weak var delegate: MessageCellDelegate?
 
@@ -79,6 +84,18 @@ open class MessageContentCell: MessageCollectionViewCell {
         contentView.addSubview(messageBottomLabel)
         contentView.addSubview(messageContainerView)
         contentView.addSubview(avatarView)
+        contentView.bringSubview(toFront: messageTopLabel)
+        messageContainerView.addSubview(verticalLine)
+
+        messageContainerView.layer.cornerRadius = 4.0
+        messageContainerView.layer.masksToBounds = true
+
+        verticalLine.frame = CGRect(0,
+                                    0,
+                                    2,
+                                    messageContainerView.bounds.height)
+        verticalLine.autoresizingMask = UIViewAutoresizing.flexibleHeight
+        
     }
 
     open override func prepareForReuse() {
@@ -119,6 +136,7 @@ open class MessageContentCell: MessageCollectionViewCell {
 
         let messageColor = displayDelegate.backgroundColor(for: message, at: indexPath, in: messagesCollectionView)
         let messageStyle = displayDelegate.messageStyle(for: message, at: indexPath, in: messagesCollectionView)
+        let veriticalColor = displayDelegate.vertifcalLineBackgroundColor(for: message, at: indexPath, in: messagesCollectionView)
 
         displayDelegate.configureAvatarView(avatarView, for: message, at: indexPath, in: messagesCollectionView)
 
@@ -132,6 +150,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         cellTopLabel.attributedText = topCellLabelText
         messageTopLabel.attributedText = topMessageLabelText
         messageBottomLabel.attributedText = bottomText
+        self.verticalLine.backgroundColor = veriticalColor
     }
 
     /// Handle tap gesture on contentView and its subviews.
@@ -231,7 +250,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         case .natural:
             fatalError(MessageKitError.avatarPositionUnresolved)
         }
-
+        origin.x = 0
         messageContainerView.frame = CGRect(origin: origin, size: attributes.messageContainerSize)
     }
 
@@ -248,12 +267,11 @@ open class MessageContentCell: MessageCollectionViewCell {
     open func layoutMessageTopLabel(with attributes: MessagesCollectionViewLayoutAttributes) {
         guard attributes.messageTopLabelSize != .zero else { return }
         
-        messageTopLabel.textAlignment = attributes.messageTopLabelAlignment.textAlignment
-        messageTopLabel.textInsets = attributes.messageTopLabelAlignment.textInsets
+        messageTopLabel.textAlignment = NSTextAlignment.left
+      //  messageTopLabel.textInsets = attributes.messageTopLabelAlignment.textInsets
 
-        let y = messageContainerView.frame.minY - attributes.messageContainerPadding.top - attributes.messageTopLabelSize.height
-        let origin = CGPoint(x: 0, y: y)
-        
+        let y = messageContainerView.frame.minY + 10
+        let origin = CGPoint(x: 5, y: y)
         messageTopLabel.frame = CGRect(origin: origin, size: attributes.messageTopLabelSize)
     }
 

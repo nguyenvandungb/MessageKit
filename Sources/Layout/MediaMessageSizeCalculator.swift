@@ -36,13 +36,16 @@ open class MediaMessageSizeCalculator: MessageSizeCalculator {
             }
             return item.size
         }
+        var size = CGSize.zero
         switch message.kind {
         case .photo(let item):
-            return sizeForMediaItem(maxWidth, item)
+            size = sizeForMediaItem(maxWidth, item)
         case .video(let item):
-            return sizeForMediaItem(maxWidth, item)
+            size =  sizeForMediaItem(maxWidth, item)
         default:
-            fatalError("messageContainerSize received unhandled MessageDataType: \(message.kind)")
+            break
         }
+        size.width = UIScreen.main.bounds.size.width - 40
+        return size
     }
 }
